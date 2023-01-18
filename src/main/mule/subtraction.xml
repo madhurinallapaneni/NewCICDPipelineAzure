@@ -32,6 +32,6 @@ ns ns0 http://tempuri.org/
 payload.body.ns0#SubtractResponse ]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<logger level="INFO" doc:name="Logger" doc:id="6d93eed2-266e-4b0d-933d-0c0cca44ec30" message="#[payload]"/>
+		<logger level="INFO" doc:name="Print Result" doc:id="6d93eed2-266e-4b0d-933d-0c0cca44ec30" message="#[payload]"/>
 	</flow>
 </mule>
