@@ -7,7 +7,7 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
 	<flow name="DivisionFlow" doc:id="ee75c992-631f-42e4-b9ce-46aefe3425f8" >
-	<ee:transform doc:name="Transform Message" doc:id="bd0fdd10-9a68-478a-995d-db2918f51e76" >
+	<ee:transform doc:name="Provide input in XML" doc:id="bd0fdd10-9a68-478a-995d-db2918f51e76" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/xml
@@ -21,8 +21,10 @@ ns ns0 http://tempuri.org/
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<wsc:consume operation="Divide" doc:name="Consume" doc:id="a1a22ee9-1a2a-4b87-be65-c84f06cfb0f5" config-ref="Web_Service_Consumer_Config"/>
-		<ee:transform doc:name="Transform Message" doc:id="d520a57b-80d1-45ba-a9e9-b2c5ebc558fb" >
+		<until-successful maxRetries="3" doc:name="Until Successful" doc:id="f20eb213-a3e8-486b-acbe-edbb5c3c1724" >
+			<wsc:consume operation="Divide" doc:name="To Consume Soap API for division operation" doc:id="a1a22ee9-1a2a-4b87-be65-c84f06cfb0f5" config-ref="Web_Service_Consumer_Config" />
+		</until-successful>
+		<ee:transform doc:name="XML to JSON" doc:id="d520a57b-80d1-45ba-a9e9-b2c5ebc558fb" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -31,7 +33,7 @@ ns ns0 http://tempuri.org/
 payload.body.ns0#DivideResponse ]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<logger level="INFO" doc:name="Logger" doc:id="e4cfbbf1-8272-498e-83b4-1d7bf46a4016" message="#[payload]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="e4cfbbf1-8272-498e-83b4-1d7bf46a4016" message='#[payload]'/>
 	
 	
 	</flow>

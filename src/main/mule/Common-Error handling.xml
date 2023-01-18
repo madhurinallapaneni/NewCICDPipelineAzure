@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<error-handler name="Common-Error_handlingError_Handler" doc:id="ff197e66-0266-4ccb-9697-3e68bbea5863" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="9d9b5442-98f5-4630-af3b-42c5099767ad" type="WSC:CONNECTIVITY,WSC:TIMEOUT">
+			<logger level="INFO" doc:name="Logger" doc:id="50dc93d0-34ed-46f3-89a3-6bb8fce13f58" message="Connection issues"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="de14d8c2-2ba7-4328-b687-f06a2913c351" type=" WSC:INVALID_WSDL, ">
+			<logger level="INFO" doc:name="Logger" doc:id="24224af8-e814-4c45-ac56-484341e409f4" message="Check WSDL.. Provided invalid WSDL"/>
+		</on-error-propagate>
+	</error-handler>
+</mule>

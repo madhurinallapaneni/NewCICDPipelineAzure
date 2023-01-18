@@ -6,7 +6,7 @@
 http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<flow name="subtractionFlow" doc:id="03a98bc7-cbb5-4bfe-aa01-c439c47b8243" >
-		<ee:transform doc:name="Transform Message" doc:id="0d8989a9-befd-4ec5-9860-3892a2e51bca" >
+		<ee:transform doc:name="Provide input in XML" doc:id="0d8989a9-befd-4ec5-9860-3892a2e51bca" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/xml
@@ -20,8 +20,10 @@ ns ns0 http://tempuri.org/
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<wsc:consume operation="Subtract" doc:name="Consume" doc:id="d5895266-2fcf-4ddf-9893-9e63a9788283" config-ref="Web_Service_Consumer_Config"/>
-		<ee:transform doc:name="Transform Message" doc:id="2c7d8023-5cb4-4dc9-9c15-2c1e16238b2b" >
+		<until-successful maxRetries="3" doc:name="Until Successful" doc:id="b4554d31-b1c7-46cc-8dbb-5558fb7d79cd" >
+			<wsc:consume operation="Subtract" doc:name="To Consume Soap API for subtraction operation" doc:id="d5895266-2fcf-4ddf-9893-9e63a9788283" config-ref="Web_Service_Consumer_Config" />
+		</until-successful>
+		<ee:transform doc:name="XML to JSON" doc:id="2c7d8023-5cb4-4dc9-9c15-2c1e16238b2b" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json

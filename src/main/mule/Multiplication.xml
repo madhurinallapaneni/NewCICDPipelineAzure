@@ -8,7 +8,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
 http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd">
 	<flow name="MultiplicationFlow" doc:id="756eb215-bdc7-4940-a492-38907b04a114" >
-		<ee:transform doc:name="Transform Message" doc:id="dfe2b406-9fc7-4312-9979-f8f40069df74" >
+		<ee:transform doc:name="Provide input in XML" doc:id="dfe2b406-9fc7-4312-9979-f8f40069df74" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/xml
@@ -22,8 +22,10 @@ ns ns0 http://tempuri.org/
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<wsc:consume operation="Multiply" doc:name="Consume" doc:id="f3927167-6b04-48cc-806a-5858debe3772" config-ref="Web_Service_Consumer_Config"/>
-		<ee:transform doc:name="Transform Message" doc:id="64055b91-d63b-4b02-bd13-c8ce04864372" >
+		<until-successful maxRetries="3" doc:name="Until Successful" doc:id="686efba3-6437-47c9-a440-20d3c22d7652" >
+			<wsc:consume operation="Multiply" doc:name="To Consume Soap API for  multiplication operation" doc:id="f3927167-6b04-48cc-806a-5858debe3772" config-ref="Web_Service_Consumer_Config" />
+		</until-successful>
+		<ee:transform doc:name="XML to JSON" doc:id="64055b91-d63b-4b02-bd13-c8ce04864372" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json

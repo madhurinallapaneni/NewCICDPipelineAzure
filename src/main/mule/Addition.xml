@@ -7,7 +7,7 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
 	<flow name="AdditionFlow" doc:id="49d2e79d-f455-41c1-ba6a-0509a4f3f77c" >
-	<ee:transform doc:name="Transform Message" doc:id="124e7c88-8ec3-460b-a7ea-ef5583eff9de" >
+	<ee:transform doc:name="Provide input in XML" doc:id="124e7c88-8ec3-460b-a7ea-ef5583eff9de" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/xml
@@ -21,8 +21,10 @@ ns ns0 http://tempuri.org/
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<wsc:consume operation="Add" doc:name="Consume" doc:id="090287b6-2e9a-41b8-b878-c29c0de90b69" config-ref="Web_Service_Consumer_Config"/>
-		<ee:transform doc:name="Transform Message" doc:id="b5aa047d-055c-45b3-b498-29fca9349043" >
+		<until-successful maxRetries="3" doc:name="Until Successful" doc:id="4e734ae9-4d2f-4560-81fb-84a930f9e954" >
+			<wsc:consume operation="Add" doc:name="To Consume Soap API for addition operation" doc:id="090287b6-2e9a-41b8-b878-c29c0de90b69" config-ref="Web_Service_Consumer_Config" />
+		</until-successful>
+		<ee:transform doc:name="XML to JSON" doc:id="b5aa047d-055c-45b3-b498-29fca9349043" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -34,7 +36,6 @@ ns ns0 http://tempuri.org/
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="404f2c54-2b69-462d-a91e-2d93fca1299c" message="#[payload]"/>
-		<logger level="INFO" doc:name="Logger" doc:id="0b6d2008-110a-438c-afae-d82ba86c7960" message="Addition is done"/>
 	
 	
 	</flow>
